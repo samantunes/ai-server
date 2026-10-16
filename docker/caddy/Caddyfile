@@ -1,0 +1,19 @@
+# TLS automático (Let's Encrypt) para o domínio em DOMAIN.
+# Com DOMAIN=localhost o Caddy usa um certificado interno (teste local).
+{$DOMAIN} {
+	request_body {
+		max_size 2MB
+	}
+
+	reverse_proxy llm:8080 {
+		# Repassa o streaming (SSE) sem buffer.
+		flush_interval -1
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	log
+}

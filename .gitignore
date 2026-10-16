@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ai-server: segredos e artefatos locais
+secrets/
+*.gguf
