@@ -50,7 +50,24 @@ curl https://<DOMAIN>/v1/chat/completions \
   -d '{"model":"bonsai","messages":[{"role":"user","content":"Oi"}]}'
 ```
 
-Nas aplicações, qualquer SDK OpenAI funciona com `base_url=https://<DOMAIN>/v1`.
+Nas aplicações, qualquer SDK compatível com OpenAI funciona. Com o LiteLLM:
+
+```python
+import litellm
+
+r = litellm.completion(
+    model="openai/bonsai",              # prefixo openai/ = servidor compatível com OpenAI
+    api_base="https://<DOMAIN>/v1",
+    api_key="sk-...",
+    messages=[{"role": "user", "content": "Oi"}],
+    stream=True,
+    timeout=300,                        # CPU lenta: prompts longos demoram
+)
+for chunk in r:
+    print(chunk.choices[0].delta.content or "", end="")
+```
+
+A temperatura padrão é `TEMPERATURE` no `.env` (0.2); o cliente pode sobrescrever.
 
 ## Operação
 
@@ -60,6 +77,8 @@ Nas aplicações, qualquer SDK OpenAI funciona com `base_url=https://<DOMAIN>/v1
 | Revogar chave | apagar a linha em `secrets/api-keys` e `docker compose restart llm` |
 | Atualizar código | `git pull && docker compose up -d --build` |
 | Logs | `docker compose logs -f` |
+| Medir velocidade | `scripts/bench.sh` |
+| Compilar para a CPU da VPS | `LLAMA_SOURCE=native` no `.env` e `docker compose up -d --build` |
 
 ## Teste local
 

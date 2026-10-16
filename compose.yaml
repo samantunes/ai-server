@@ -1,12 +1,16 @@
 services:
   llm:
-    build: ./docker/llm
+    build:
+      context: ./docker/llm
+      args:
+        LLAMA_SOURCE: ${LLAMA_SOURCE:-release}
     image: ai-server-llm
     restart: unless-stopped
     environment:
       THREADS: ${THREADS:-2}
       CTX_SIZE: ${CTX_SIZE:-8192}
       PARALLEL: ${PARALLEL:-1}
+      TEMPERATURE: ${TEMPERATURE:-0.2}
     volumes:
       - models:/models
     secrets:
