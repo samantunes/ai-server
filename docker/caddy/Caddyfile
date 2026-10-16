@@ -1,6 +1,18 @@
-# TLS automático (Let's Encrypt) para o domínio em DOMAIN.
-# Com DOMAIN=localhost o Caddy usa um certificado interno (teste local).
+# TLS automático (Let's Encrypt) para DOMAIN, que pode ser um domínio ou o
+# IP público da VPS. Certificado de IP exige o perfil "shortlived" (~6 dias),
+# renovado sozinho pelo Caddy. Com DOMAIN=localhost usa um certificado interno.
+{
+	# Clientes que acessam pelo IP não mandam SNI; usa o certificado do DOMAIN.
+	default_sni {$DOMAIN}
+}
+
 {$DOMAIN} {
+	tls {
+		issuer acme {
+			profile shortlived
+		}
+	}
+
 	request_body {
 		max_size 2MB
 	}

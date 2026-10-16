@@ -1,0 +1,6 @@
+# Teste local: certificado interno do Caddy em https://localhost.
+localhost {
+	reverse_proxy llm:8080 {
+		flush_interval -1
+	}
+}

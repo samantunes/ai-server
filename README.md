@@ -19,8 +19,8 @@ em `.env`, ambos só no servidor.
 3. Na Security List / NSG da subnet, regras de entrada:
    - TCP 22 só do seu IP;
    - TCP 80, TCP 443 e UDP 443 de `0.0.0.0/0`.
-4. Criar um registro DNS `A` do seu domínio apontando para o IP
-   (sem domínio: use `<ip-com-hifens>.sslip.io`).
+4. Domínio é opcional: com `DOMAIN=<IP>` o Caddy emite um certificado
+   Let's Encrypt para o próprio IP (perfil shortlived, renovado sozinho).
 
 ## 2. Na VPS
 
@@ -35,7 +35,7 @@ exit                           # reentrar para o grupo docker valer
 ```sh
 ssh ubuntu@<ip>
 cd ai-server
-cp .env.example .env && nano .env      # DOMAIN=...
+cp .env.example .env && nano .env      # DOMAIN=<IP público>
 scripts/new-api-key.sh minha-app       # guarde a chave exibida
 docker compose up -d --build           # 1ª vez baixa o modelo (~1,1 GB)
 docker compose logs -f llm             # espere "model loaded"
@@ -64,4 +64,4 @@ Nas aplicações, qualquer SDK OpenAI funciona com `base_url=https://<DOMAIN>/v1
 ## Teste local
 
 O mesmo `compose.yaml` roda na sua máquina (o Dockerfile escolhe o binário x64 ou arm64):
-`.env` com `DOMAIN=localhost`, `HTTP_PORT=8180`, `HTTPS_PORT=8443` e use `curl -k https://localhost:8443/...`.
+`.env` com `DOMAIN=localhost`, `CADDYFILE=Caddyfile.local`, `HTTP_PORT=8180`, `HTTPS_PORT=8443` e use `curl -k https://localhost:8443/...`.
