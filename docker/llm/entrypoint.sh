@@ -29,7 +29,7 @@ exec /opt/llama/llama-server \
   --host 0.0.0.0 --port 8080 \
   --api-key-file "$API_KEYS_FILE" \
   -t "$THREADS" -c "$CTX_SIZE" -np "$PARALLEL" -fa on \
-  --chat-template-kwargs '{"enable_thinking": false}' \
+  --reasoning off \
   --temp 0.1 --top-p 0.8 --top-k 20 --min-p 0 \
   --presence-penalty 1.5 --repeat-penalty 1.0 --repeat-last-n 64 \
   "$@"
